@@ -1,0 +1,159 @@
+from random import randint
+import sys
+
+
+def knife_fight():
+    # Variable(s) >>> (beginning)
+    cpu_dead = False
+    keep_going = True
+    max_hp = int(15)
+    max_f = int(7)
+    cpu_hp = int(15)
+    cpu_f = int(0)
+    my_hp = int(15)
+    my_f = int(0)
+    # Variable(s) >>> (end)
+    name = input("What is your name?: ")
+    print("\f")
+    if name[0].upper() == "C":
+        print(name + ", I like that name.")
+    else:
+        print("Wow " + name + ", that name sucks.")
+    print("...")
+    ans = input("So " + name + ", would you like to fight me (Y or N)?: ")
+    if ans.upper() == "Y":
+        print("\f")
+        print("Noice! Lets fight!")
+    elif ans.upper() == "N":
+        print("\f")
+        print("Oh. Okay then.")
+        sys.exit("Game Over")
+    else:
+        print("\f")
+        print("If you're not going to take this seriously, then I am just going to leave.")
+        sys.exit("Game Over")
+    print("\f")
+    while keep_going:
+        if my_hp <= 0:
+            keep_going = False
+        elif cpu_hp <= 0:
+            keep_going = False
+        else:
+            keep_going = True
+        print("CPU HP: " + str(cpu_hp) + "\t" + name.upper() + " HP: " + str(my_hp))
+        print("What would you like to do?")
+        print("Attack  (A)")
+        print("Heal    (H)")
+        print("Fortify (F)")
+        ans = input("Enter: ")
+        if ans.upper() == "A":
+            rand_num = randint(0, 10)
+            print("\f")
+            if cpu_f >= rand_num or rand_num == 0:
+                cpu_hp = cpu_hp
+                if rand_num == 0:
+                    print("You missed... Dumbass.")
+                else:
+                    print("My fortify nullified your attack!")
+            elif rand_num >= cpu_hp:
+                cpu_hp = 0
+                print("You killed me!")
+                cpu_dead = True
+                keep_going = False
+            else:
+                cpu_hp = cpu_hp - (rand_num - cpu_f)
+                print("You dealt " + str(rand_num - cpu_f) + " damage to me!")
+        elif ans.upper() == "H":
+            rand_num = randint(0, 10)
+            print("\f")
+            if my_hp >= max_hp:
+                my_hp = max_hp
+                print("You are already at full health!")
+            elif (my_hp + rand_num) >= max_hp:
+                my_hp = max_hp
+                print("You are back at full health.")
+            elif rand_num == 0:
+                print("You failed to heal yourself!")
+            else:
+                my_hp = my_hp + rand_num
+                print("You healed yourself by " + str(rand_num) + "pts.")
+        elif ans.upper() == "F":
+            rand_num = randint(1, 3)
+            print("\f")
+            if my_f >= max_f:
+                my_f = max_f
+                print("You have already reached maximum fortification!")
+            elif (my_f + rand_num) >= max_f:
+                my_f = max_f
+                print("You have achieved maximum fortification!")
+            else:
+                my_f = my_f + rand_num
+                print("You improved your fortification by " + str(rand_num) + "pts.")
+        else:
+            print("It seems as though you were distracted by something and lost their chance at a turn.")
+        rand_num = randint(1, 5)
+        if rand_num == 1 or rand_num == 2:
+            cpu_ans = "A"
+        elif rand_num == 3:
+            cpu_ans = "H"
+        elif rand_num == 4:
+            cpu_ans = "F"
+        else:
+            cpu_ans = "R"
+        if (cpu_ans.upper() == "A") and (cpu_dead == False):
+            rand_num = randint(0, 10)
+            if my_f >= rand_num or rand_num == 0:
+                my_hp = my_hp
+                if rand_num == 0:
+                    print("I attempted to attack you, but apparently I missed.")
+                else:
+                    print("Your fortify nullified my attack!")
+            elif rand_num >= my_hp:
+                my_hp = 0
+                print("I killed you!")
+                keep_going = False
+            else:
+                my_hp = my_hp - (rand_num - my_f)
+                print("I dealt " + str(rand_num - my_f) + " damage to you!")
+        elif (cpu_ans.upper() == "H") and (cpu_dead == False):
+            rand_num = randint(0, 10)
+            if cpu_hp >= max_hp:
+                cpu_hp = max_hp
+                print("I attempted to heal myself, but I was apparently already at full health.")
+            elif (cpu_hp + rand_num) >= max_hp:
+                cpu_hp = max_hp
+                print("I have regained full health!")
+            elif rand_num == 0:
+                print("I failed to heal myself!")
+            else:
+                cpu_hp = cpu_hp + rand_num
+                print("I healed myself by " + str(rand_num) + "pts.")
+        elif (cpu_ans.upper() == "F") and (cpu_dead == False):
+            rand_num = randint(1, 3)
+            if cpu_f >= max_f:
+                cpu_f = max_f
+                print("I attempted to fortify, but I have apparently already reached maximum fortification.")
+            elif (cpu_f + rand_num) >= max_f:
+                cpu_f = max_f
+                print("I have achieved maximum fortification!")
+            else:
+                cpu_f = cpu_f + rand_num
+                print("I have increased my fortification by " + str(rand_num) + "pts.")
+        elif (cpu_ans.upper() == "R") and (cpu_dead == False):
+            print("It seems as though the I was distracted by something and lost my chance at a turn.")
+        else:
+            print("*Gurgling noises*")
+    if my_hp <= 0:
+        print("\f")
+        print("Wow " + name + ", you suck pretty hard.")
+    elif cpu_hp <= 0:
+        print("\f")
+        print("You actually won!? Weird.")
+    else:
+        print("\f")
+        print("Error 404.")
+    game_over = input("Press enter to end the game.")
+    sys.exit("Game Over")
+
+
+knife_fight()
